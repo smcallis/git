@@ -193,6 +193,9 @@ branches from there if `<branch>` is ambiguous but exists on the
 linkgit:git-config[1].
 +
 Use `--no-guess` to disable this.
++
+The default behavior can be set via the `checkout.guess` configuration
+variable.
 
 -l::
 	Create the new branch's reflog; see linkgit:git-branch[1] for
