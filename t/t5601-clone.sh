@@ -752,9 +752,24 @@ test_expect_success 'batch missing blob request does not inadvertently try to fe
 . "$TEST_DIRECTORY"/lib-httpd.sh
 start_httpd
 
+# generate a process unique one-up value.  This should not be called from
+# a subprocess if truly unique values are needed.
+global_counter_for_nonce=0
+gen_nonce () {
+	global_counter_for_nonce=$((global_counter_for_nonce + 1)) &&
+	echo "$global_counter_for_nonce"
+}
+
 test_expect_success 'partial clone using HTTP' '
 	partial_clone "$HTTPD_DOCUMENT_ROOT_PATH/server" "$HTTPD_URL/smart/server"
 '
+
+test_expect_success 'partial clone using HTTP with redirect' '
+	_NONCE=$(gen_nonce) &&
+	curl "$HTTPD_URL/error_ntime/${_NONCE}/1/502/1/smart/server" &&
+	partial_clone "$HTTPD_DOCUMENT_ROOT_PATH/server" "$HTTPD_URL/error_ntime/${_NONCE}/1/502/1/smart/server"
+'
+
 
 # DO NOT add non-httpd-specific tests here, because the last part of this
 # test script is only executed when httpd is available and enabled.

@@ -132,6 +132,7 @@ prepare_httpd() {
 	install_script incomplete-length-upload-pack-v2-http.sh
 	install_script incomplete-body-upload-pack-v2-http.sh
 	install_script broken-smart-http.sh
+	install_script error-ntime.sh
 	install_script error-smart-http.sh
 	install_script error.sh
 	install_script apply-one-time-perl.sh
