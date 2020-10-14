@@ -805,7 +805,7 @@ static int run_slot(struct active_request_slot *slot,
 	if (!results)
 		results = &results_buf;
 
-	err = run_one_slot(slot, results);
+	err = run_one_slot(slot, results, NULL);
 
 	if (err != HTTP_OK && err != HTTP_REAUTH) {
 		struct strbuf msg = STRBUF_INIT;

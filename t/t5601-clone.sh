@@ -770,6 +770,16 @@ test_expect_success 'partial clone using HTTP with redirect' '
 	partial_clone "$HTTPD_DOCUMENT_ROOT_PATH/server" "$HTTPD_URL/error_ntime/${_NONCE}/1/502/1/smart/server"
 '
 
+test_expect_success 'partial clone with retry' '
+	partial_clone "$HTTPD_DOCUMENT_ROOT_PATH/server" "$HTTPD_URL/error_ntime/$(gen_nonce)/3/429/1/smart/server" 2>err &&
+	test_i18ngrep "got HTTP response 429" err
+'
+
+test_expect_success 'partial clone with retry, exponential backoff' '
+	partial_clone "$HTTPD_DOCUMENT_ROOT_PATH/server" "$HTTPD_URL/error_ntime/$(gen_nonce)/2/429/-1/smart/server" 2>err &&
+	test_i18ngrep "retrying after 2 seconds" err &&
+	test_i18ngrep "retrying after 4 seconds" err
+'
 
 # DO NOT add non-httpd-specific tests here, because the last part of this
 # test script is only executed when httpd is available and enabled.
